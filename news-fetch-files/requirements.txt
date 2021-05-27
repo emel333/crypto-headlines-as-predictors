@@ -1,0 +1,9 @@
+beautifulsoup4
+selenium
+chromedriver-binary
+pandas
+pattern
+fake_useragent
+setuptools
+twine
+unidecode
