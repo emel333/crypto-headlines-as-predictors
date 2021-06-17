@@ -15,7 +15,9 @@ A venture capital firm has asked for the beginnings of a sentiment analysis focu
 
 <ul>
     <li>Can headlines alone provide any predictive power in the crypto market?</li>
-    <li>Does the word "Bitcoin" wit</li>
+    <li>How does the keyword "Bitcoin" correlate to the price movement of an Altcoin?</li>
+    <li>Are there any significant "trigger words" in headlines?</li>
+    <li>How can a model for predicting crypto price movement based on sentiment analysis be approached?</li>
 </ul>
 
 
@@ -23,64 +25,57 @@ A venture capital firm has asked for the beginnings of a sentiment analysis focu
 
 
 <ul>
-    <li>Used the <i>Zillow housing dataset</i> provided by Zillow, a publicly available dataset, for cleaning, analyzing and modeling</li>
-    <li>Transposed the data into Time Series of two lengths: 1996-2018 as well as 2010-2018</li>
-    <li>Derived Historical ROI figure from the series data, and focused on the top zip code for initial analysis</li>
-    <li>Completed a seasonal decomposition of the series to de-seasonalize and de-trend the data</li>
-    <li>Determined the optimal non-seasonal and seasonal terms to enter for SARIMA modeling</li>
-    <li>Sought the zip code / time period combination with the lowest AIC score</li>
-    <li>Used Folium and Geocode to map the top 21 zip codes according to Historical ROI</li>
-    <li>Evaluated forecasts for top-performing zip codes using MSE and RMSE</li>
+    <li>Used the <i>CoinAPI</i> provided by CoinApi, as well as Apipheny (for querying and gathering dataset from CoinAPI) to capture historical Litecoin price data</li>
+    <li>With Newsfetch I scraped headlines from 3 of the top crypto publications online using the keyword "Bitcoin"</li>
+    <li>Performed NLP using Stopwords (for pre-processing) and NLTK (for Word Frequency)</li>
+    <li>Labeled all headlines according to the week in which they were published, and in accordance with weekly Litecoin price data</li>
+    <li>Heavy usage of decision tree models (Random Forest, XGBoost) as well as Logistic Regression for modeling</li>
+    <li>Focused on precision score so as to minimize the number of False Positives (or, predicting "up" when the truth is "down")</li>
+    <li>Gathered feature importances and highest impact words to get initial sense for modeling effectiveness</li>
 </ul>
 
 
 # Findings:
 
 
-### Three zip codes (28203, 28204, and 28205) have an historical ROI above 2.5
+### Balanced Target Variable, With Headlines Corresponding To Both Upward and Downward Price Movement
 
-All three of these zip codes are located in Mecklenburg county and are head & shoulders above the majority of the other zip codes on the top 21 zip codes list.
+Of the total number of headlines, there's nearly a 50-50 split for 'upward' and 'downward' Litecoin price movement, even with the keyword searched being "Bitcoin".
 
 ![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/charlotte-and-surrounding-hroi.JPG "Historical ROI Top 21 Zip Codes In Charlotte, NC and Surrounding Areas")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/charlotte-zips-map.JPG "Top 21 Zip Codes Plotted On Map")
+
+
+### Logistic Regression Baseline Model Could Not Be Confidently Cast Aside
+
+With a precision score of 0.661 (at the time the model was run), it was the best performing model, however more must be done to optimize the use of models like XGBoost along with GridSearchCV to further compare.
+
+![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/charlotte-and-surrounding-hroi.JPG "Historical ROI Top 21 Zip Codes In Charlotte, NC and Surrounding Areas")
 
 
 
-### Achieving stationarity on the Series for 28204 (and other zip codes) proved challenging
+### The Words "Bitcoin" and "highs" have high feature importance, but differ in terms of impact on upward and downward Litecoin price movement
 
-Even with multiple attempts at differencing the Series, it was only a Seasonal Decomposition of the Series that enabled me to verify stationarity with the series residuals. A Dickey-Fuller test run on the series residuals output a p-value at an acceptable level (below 0.05). Because multiple zip codes revealed the same challenge with stationarity, I continued focusing on 28204.
+Even with multiple attempts at modeling, and with varied results in scoring, the top features consistently proved to be the words "Bitcoin" and "highs." However, in terms of significance, the word "high" has proven better than the word "Bitcoin".
 
 ![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/differencing-onelag-28204.JPG "Zip Code 28204: One Difference")
 ![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/seasdecom-28204.JPG "Zip Code 28204: After Seasonal Decomposition")
 
 
 
-### Consistently Lower AIC Scores For 2010-2018 Time Series vs. 1996-2018 Time Series
+### The most frequent words vs. the most significant words maintain stark contrast
 
-By testing different non-seasonal and seasonal order terms with the SARIMA model for 5 of the top 21 zip codes, it was proven that the shorter time series was significantly better for modeling. As an example, zip code 28203 AIC score for the 1996-2018 series was ~4093 while the score for the 2010-2018 series was ~1028. This perhaps proves the disadvantage to including time series data from the period consisting of the Great Recession. The SARIMA modeling for the two series, however, revealed the same terms optimal for both periods, although the 1996-2018 series consistently showed homoscedasticity, lack of normal distribution of residuals, etc.
-
-This led to a change in focus, to zip codes 28205 and 28012, as they both showed the lowest AIC scores irrespective of time Series length.
+Using NLTK, I created word clouds displaying the most frequent words in all of the headlines that corresponded to upward price movement, and did the same for headlines corresponding to downward price movement. There doesn't appear to be much differentiating these two, however, with respect to feature significance to BOTH upward and downward price movement, other words proved more significant, particularly action verbs have a significant presence in the group of words.
 
 
 ![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/shorter-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 2010-2018")
 ![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/longer-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 1996-2018")
+![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/longer-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 1996-2018")
 
 
 
-# Recommendation -- Belmont, NC / Zip code 28012
+# Recommendation -- Consider Article Summaries or Meta Descriptions Next
 
-Dynamic forecast RMSE of ~1023 as well as a forecasted increase in mean home prices to nearly $250,000 USD by 2023 (current mean home price in Belmont, NC as of 03/2021 is $268,653). These metrics, coupled with the contextual elements of low housing supply, high-level of demand for housing in Charlotte, and more, it is advised to focus on Belmont, NC for build-to-rent real estate development, as the potential initial investment-ROI combination is likely to fare better than the rival zip code 28205.
-
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/dynamic-28012.JPG "Dynamic Forecast: 28012")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/RMSE-28012-DYNAMIC.JPG "RMSE Score For Dynamic Forecast: 28012")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/28012-final-forecast.JPG "Zip Code28012: Forecast (2018-2023)")
-
-
-#### The key adjustments made along the way:
-
-<ul>
-    <li>Changed focus from zip code 28204 to 28012 and 28205, based on AIC scores from two time series per zip code</li>
-</ul>
+Instead of headlines, it may be worth taking a similar approach but with the summaries or meta descriptions of the articles included here. Moreover, perhaps combining the price movement of multiple digital currencies (i.e. the top 100) could prove useful as well.
 
 
 
@@ -88,8 +83,8 @@ Dynamic forecast RMSE of ~1023 as well as a forecasted increase in mean home pri
 
 
 <ul>
-    <li>Belmont, NC (28012) is recommended for build-to-rent investment over zip code 28205. </li>
-    <li>The forecasted mean home price for zip code 28012, by 2023, is just under $250,000 USD</li>
-    <li>Recent housing price data, migration trends, land cost and rental price data should be exogenous variables considered next</li>
-    <li>Time series housing data from 2010-2018 is a better series for modeling than 1996-2018</li>
+    <li>The words "bitcoin" and "highs" were the top features</li>
+    <li>Action verbs have significance presence in the group of words that statistically are most significant to BOTH upward and downward price movement</li>
+    <li>Combine the historical price data of multiple currencies to analyze alongside the headlines</li>
+    <li>It does appear at least valuable to perform NLP analysis alongside crypto market data, to at the very least understand whether a word is a "trigger" word or indicator for the markets</li>
 </ul>
