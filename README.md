@@ -40,16 +40,16 @@ A venture capital firm has asked for the beginnings of a sentiment analysis focu
 
 ### Balanced Target Variable, With Headlines Corresponding To Both Upward and Downward Price Movement
 
-Of the total number of headlines, there's nearly a 50-50 split for 'upward' and 'downward' Litecoin price movement, even with the keyword searched being "Bitcoin".
+Of the total number of headlines, there's nearly a 50-50 split for 'upward' and 'downward' Litecoin price movement, even with the keyword searched being "Bitcoin". As well, as is expected, some days / weeks have more corresponding headlines than others.
 
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/charlotte-and-surrounding-hroi.JPG "Historical ROI Top 21 Zip Codes In Charlotte, NC and Surrounding Areas")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/data_frame_crypto_market_headlines.JPG "Litecoin Price Movement Aligned With Headlines")
 
 
 ### Logistic Regression Baseline Model Could Not Be Confidently Cast Aside
 
 With a precision score of 0.661 (at the time the model was run), it was the best performing model, however more must be done to optimize the use of models like XGBoost along with GridSearchCV to further compare.
 
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/charlotte-and-surrounding-hroi.JPG "Historical ROI Top 21 Zip Codes In Charlotte, NC and Surrounding Areas")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/baseline_model_logreg.JPG "Baseline Model: Logistic Regression")
 
 
 
@@ -57,8 +57,7 @@ With a precision score of 0.661 (at the time the model was run), it was the best
 
 Even with multiple attempts at modeling, and with varied results in scoring, the top features consistently proved to be the words "Bitcoin" and "highs." However, in terms of significance, the word "high" has proven better than the word "Bitcoin".
 
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/differencing-onelag-28204.JPG "Zip Code 28204: One Difference")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/seasdecom-28204.JPG "Zip Code 28204: After Seasonal Decomposition")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/feature_importances_capstone.JPG "Random Forest Modeling: Feature Importances")
 
 
 
@@ -67,15 +66,15 @@ Even with multiple attempts at modeling, and with varied results in scoring, the
 Using NLTK, I created word clouds displaying the most frequent words in all of the headlines that corresponded to upward price movement, and did the same for headlines corresponding to downward price movement. There doesn't appear to be much differentiating these two, however, with respect to feature significance to BOTH upward and downward price movement, other words proved more significant, particularly action verbs have a significant presence in the group of words.
 
 
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/shorter-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 2010-2018")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/longer-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 1996-2018")
-![alt text](https://github.com/emel333/time_series_home_prices/blob/main/Graphics/longer-series-modeling-sarimax-vis.JPG "SARIMA Model Verification Results: Residuals + Histogram For Series 1996-2018")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/freq_words_price_up.JPG "Vectors Associated Most Frequently With Upward Price Movement")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/freq_words_price_down.JPG "Vectors Associated Most Frequently With Downward Price Movement")
+![alt text](https://github.com/emel333/crypto-headlines-as-predictors/blob/main/all_other_files/graphics/essential_words_for_prediction.JPG "Words With Most Impact On BOTH Upward & Downard Price Movement")
 
 
 
-# Recommendation -- Consider Article Summaries or Meta Descriptions Next
+# Recommendation -- Further Analysis of "Trigger" Words
 
-Instead of headlines, it may be worth taking a similar approach but with the summaries or meta descriptions of the articles included here. Moreover, perhaps combining the price movement of multiple digital currencies (i.e. the top 100) could prove useful as well.
+It appears that sentiment can be determined for inidividual words more effectively than entire headlines. However, this could just be the first step in the process of being able to use headlines as predictors. Conversely, instead of headlines, it may be worth taking a similar approach but with the summaries or meta descriptions of the articles included here. Also, perhaps combining the price movement of multiple digital currencies (i.e. the top 100) could prove useful as well.
 
 
 
